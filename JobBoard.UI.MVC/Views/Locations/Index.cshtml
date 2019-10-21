@@ -1,0 +1,87 @@
+﻿@model IEnumerable<JobBoard.DATA.EF.Location>
+
+@{
+    ViewBag.Title = "Index";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Locations</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="/Locations">Locations</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>@ViewBag.Title</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <h2>Index</h2>
+
+                <p>
+                    @Html.ActionLink("Create New", "Create")
+                </p>
+                <table class="table table-striped" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                Store Number
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.City)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.State)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ManagerID)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StoreNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.City)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.State)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ManagerID)
+
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.LocationID }, new { @class = "btn btn-primary" })
+                                    @Html.ActionLink("Details", "Details", new { id = item.LocationID }, new { @class = "btn btn-warning" })
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.LocationID }, new { @class = "btn btn-danger" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+                <a href="/Home/AdminPanel">Back to panel</a>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+              
+    </script>
+}

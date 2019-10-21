@@ -1,0 +1,89 @@
+﻿@model JobBoard.DATA.EF.UserDetail
+
+@{
+    ViewBag.Title = "Edit";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Admin Panel</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="/UserDetails">UserDetails</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>@ViewBag.Title</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <h2>Edit</h2>
+
+
+                @using (Html.BeginForm("Edit", "UserDetails", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+
+                    @Html.HiddenFor(model => model.ResumeFileName)
+
+                    <div class="form-horizontal">
+                        <h4>UserDetail</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.UserID)
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ResumeFileName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ResumeFileName, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.ResumeFileName, "", new { @class = "text-danger" })
+
+                                <a target="_blank" href="~/Content/resumes/@Html.DisplayFor(model => model.ResumeFileName)">Link to Resume</a>
+                            </div>
+                            <div class="col-md-10" style="margin-top:15px;">
+                                <input type="file" style="display:inline" name="fupResume" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+               
+                    <div>
+                        <a href="/UserDetails/Details/@Model.UserID">Cancel</a>
+                    </div>
+               
+
+
+                @section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+                }
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,144 @@
+﻿@model JobBoard.DATA.EF.OpenPosition
+
+@{
+    ViewBag.Title = "Details";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Open Positions</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="/OpenPositions">Open Positions</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>@ViewBag.Title</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+
+                <h2>@Html.DisplayFor(model => model.Position.Title)</h2>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <i class="fa fa-heart-o fa-2x" id="heartSuccess" style="border: 2px solid deeppink; border-radius:100%; padding:10px; color:deeppink;"></i>
+                    <span>
+                        @Ajax.ActionLink("Save Job", "savedJob","OpenPositions", new { id = Model.Position.PositionID }, new AjaxOptions
+                   {
+                       HttpMethod = "POST",
+                       Confirm = "Save for later?",
+                       OnSuccess = "saveSuccess"
+
+                   }, new { style = "color: #89ba16; font-size:2em;margin-left: 5px;", id = "save" })
+                    </span>
+
+
+
+                    <i class="fa fa-heart fa-2x" style="border: 2px solid deeppink; border-radius:100%; padding:10px; color:deeppink; display:none;" id="heartPink"></i><span style="color: gray; font-size:2em; display:none; margin-left: 5px;" id="Saved"> Job Saved!</span>
+                }
+
+
+
+                <div>
+
+                    <hr />
+                    <dl class="dl-horizontal">
+
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Position.JobDescription)
+                        </dt>
+
+                        <dd>
+                            @Html.Raw(Model.Position.JobDescription)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Location.StoreNumber)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Location.StoreNumber)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Location.City)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Location.City)
+                        </dd>
+
+                    </dl>
+                </div>
+                <p>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.OpenPositionID }, new { @class = "btn btn-secondary" })
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+
+                        if (ViewBag.AppliedPosition != null)
+                        {
+                            if (ViewBag.AppliedPosition.Contains(Model.OpenPositionID))
+                            {
+                                <a href="#" class="btn btn-secondary disabled">Applied</a>
+                            }
+
+                            else
+                            {
+
+                                @Ajax.ActionLink("Apply", "OneClickApply", new { id = Model.PositionID }, new AjaxOptions
+                           {
+                               HttpMethod = "POST",
+                               Confirm = "Are you sure you want to apply for " + Model.Position.Title + "?",
+                               OnSuccess = "deactive",
+
+                           }, new { @class = "btn btn-info", id = "oneClick" + Model.PositionID, style = "margin-left:10px; margin-right:10px" })
+                            }
+                        }
+                    }
+
+
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    @*<script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+
+            });
+
+        </script>*@
+    <script type="text/javascript">
+        function deactive(data) {
+
+
+            $('#oneClick' + data.id).addClass('disabled').text('Applied');
+
+
+        }
+
+    </script>
+    <script type="text/javascript">
+        function saveSuccess(data) {
+            $('#heartSuccess').hide();
+            $('#save').css('display', 'none');
+            $('#heartPink').css('display', 'inline-block');
+            $('#Saved').css('display', 'inline-block');
+        }
+    </script>
+
+
+}

@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Admin Panel";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Admin Panel</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    
+                    <span class="text-white"><strong>AdminPanel</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                @if (User.IsInRole("Admin"))
+                {
+                    <fieldset class="adminSetting">
+                        <legend>Admin Settings</legend>
+
+                        <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("Roles Admin", "Index", "RolesAdmin")</span>
+                        <span class="btn btn-success btn-success btn-lg text-white AddminBtn" id="uAdmin">@Html.ActionLink("Users Admin", "Index", "UsersAdmin")</span>
+                    </fieldset>
+                }
+
+
+                    <fieldset class="adminSetting">
+                        <legend>Jobs Management</legend>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("Locations", "Index", "Locations")</span>
+                            <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("Open Positions", "Index", "OpenPositions")</span>
+                          
+                            <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("Application", "Index", "Applications")</span>
+                        }
+                        else
+                        {
+                            <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("Application", "Index", "Applications")</span>
+                            <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("Open Positions", "Index", "OpenPositions")</span>
+                           
+
+                        }
+                    </fieldset>
+                @if (User.IsInRole("Admin"))
+                {
+                    <fieldset class="adminSetting">
+                        <legend>Users Management</legend>
+                        <span class="btn btn-success btn-success btn-lg text-white AddminBtn" style="margin:50px;" id="rAdmin">@Html.ActionLink("User Details", "Index", "UserDetails")</span>
+
+                    </fieldset>
+                }
+
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+

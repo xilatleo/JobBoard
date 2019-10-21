@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNet.Identity
+@using JobBoard.DATA.EF
+@if (Request.IsAuthenticated)
+{
+
+    JobBoardSiteEntities db = new JobBoardSiteEntities();
+    string userID = User.Identity.GetUserId();
+    UserDetail currentUser = db.UserDetails.Where(ud => ud.UserID == userID).FirstOrDefault();
+    string userFN = "";
+
+
+    if (currentUser != null)
+    {
+        userFN = currentUser.FirstName;
+        
+    }
+
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+      
+            @Html.ActionLink($"Hello {userFN}", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class= "btn btn-primary loginPartial" })
+        
+        <div class="loginPartial btn"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></div>
+       
+    }
+}
+else
+{
+    @*<ul class="nav navbar-nav navbar-right">*@
+    <div class="btn loginPartial">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</div>
+    <div class="btn loginPartial">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</div>
+    @*</ul>*@
+}

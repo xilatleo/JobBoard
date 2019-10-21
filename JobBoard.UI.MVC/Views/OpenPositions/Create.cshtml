@@ -1,0 +1,133 @@
+﻿@model JobBoard.DATA.EF.OpenPosition
+
+@{
+    ViewBag.Title = "Create";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Admin Panel</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="/Home/OpenPositions">Open Positions</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>@ViewBag.Title</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <h2>Create</h2>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Position.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Position.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Position.Title, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Position.JobDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Position.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Position.JobDescription, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                     
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LocationID, "LocationID", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("LocationID", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.LocationID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+                @section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+                    <script src="~/Scripts/tinymce/tinymce.js"></script>
+                    <script type="text/javascript">
+                        tinymce.init({
+                            selector: 'textarea',
+                            width: 900,
+                            height: 500,
+                            plugins: "autoresize",
+                            plugins: "advcode",
+                            plugins: "lists",
+                            toolbar: "forecolor backcolor code numlist bullist",
+                            color_map: [
+                                "000000", "Black",
+                                "993300", "Burnt orange",
+                                "333300", "Dark olive",
+                                "003300", "Dark green",
+                                "003366", "Dark azure",
+                                "000080", "Navy Blue",
+                                "333399", "Indigo",
+                                "333333", "Very dark gray",
+                                "800000", "Maroon",
+                                "FF6600", "Orange",
+                                "808000", "Olive",
+                                "008000", "Green",
+                                "008080", "Teal",
+                                "0000FF", "Blue",
+                                "666699", "Grayish blue",
+                                "808080", "Gray",
+                                "FF0000", "Red",
+                                "FF9900", "Amber",
+                                "99CC00", "Yellow green",
+                                "339966", "Sea green",
+                                "33CCCC", "Turquoise",
+                                "3366FF", "Royal blue",
+                                "800080", "Purple",
+                                "999999", "Medium gray",
+                                "FF00FF", "Magenta",
+                                "FFCC00", "Gold",
+                                "FFFF00", "Yellow",
+                                "00FF00", "Lime",
+                                "00FFFF", "Aqua",
+                                "00CCFF", "Sky blue",
+                                "993366", "Red violet",
+                                "FFFFFF", "White",
+                                "FF99CC", "Pink",
+                                "FFCC99", "Peach",
+                                "FFFF99", "Light yellow",
+                                "CCFFCC", "Pale green",
+                                "CCFFFF", "Pale cyan",
+                                "99CCFF", "Light sky blue",
+                                "CC99FF", "Plum"
+                            ]
+
+                        });
+                    </script>
+                }
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="JobBoardSiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="UserDetail" Relationship="JobBoardSiteModel.FK_UserDetails_AspNetUsers" FromRole="AspNetUser" ToRole="UserDetail" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="LocationID" />
+    </Key>
+    <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StoreNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="State" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="ManagerID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="OpenPositions" Relationship="Self.FK_OpenPositions_Locations" FromRole="Locations" ToRole="OpenPositions" />
+  </EntityType>
+  <EntityType Name="OpenPosition">
+    <Key>
+      <PropertyRef Name="OpenPositionID" />
+    </Key>
+    <Property Name="OpenPositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PositionID" Type="Int32" Nullable="false" />
+    <Property Name="LocationID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Location" Relationship="Self.FK_OpenPositions_Locations" FromRole="OpenPositions" ToRole="Locations" />
+    <NavigationProperty Name="Applications" Relationship="JobBoardSiteModel.FK_Applications_OpenPositions" FromRole="OpenPosition" ToRole="Application" />
+    <NavigationProperty Name="Position" Relationship="JobBoardSiteModel.FK_OpenPositions_Positions" FromRole="OpenPosition" ToRole="Position" />
+  </EntityType>
+  <Association Name="FK_OpenPositions_Locations">
+    <End Role="Locations" Type="Self.Location" Multiplicity="1" />
+    <End Role="OpenPositions" Type="Self.OpenPosition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Locations">
+        <PropertyRef Name="LocationID" />
+      </Principal>
+      <Dependent Role="OpenPositions">
+        <PropertyRef Name="LocationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="JobBoardSiteEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+    <EntitySet Name="Locations" EntityType="Self.Location" />
+    <EntitySet Name="OpenPositions" EntityType="Self.OpenPosition" />
+    <AssociationSet Name="FK_OpenPositions_Locations" Association="Self.FK_OpenPositions_Locations">
+      <End Role="Locations" EntitySet="Locations" />
+      <End Role="OpenPositions" EntitySet="OpenPositions" />
+    </AssociationSet>
+    <EntitySet Name="ApplicationStatus" EntityType="JobBoardSiteModel.ApplicationStatu" />
+    <EntitySet Name="Applications" EntityType="JobBoardSiteModel.Application" />
+    <AssociationSet Name="FK_Applications_ApplicationStatus" Association="JobBoardSiteModel.FK_Applications_ApplicationStatus">
+      <End Role="ApplicationStatu" EntitySet="ApplicationStatus" />
+      <End Role="Application" EntitySet="Applications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Applications_OpenPositions" Association="JobBoardSiteModel.FK_Applications_OpenPositions">
+      <End Role="OpenPosition" EntitySet="OpenPositions" />
+      <End Role="Application" EntitySet="Applications" />
+    </AssociationSet>
+    <EntitySet Name="Positions" EntityType="JobBoardSiteModel.Position" />
+    <EntitySet Name="SavedJobs" EntityType="JobBoardSiteModel.SavedJob" />
+    <EntitySet Name="UserDetails" EntityType="JobBoardSiteModel.UserDetail" />
+    <AssociationSet Name="FK_Applications_UserDetails" Association="JobBoardSiteModel.FK_Applications_UserDetails">
+      <End Role="UserDetail" EntitySet="UserDetails" />
+      <End Role="Application" EntitySet="Applications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="JobBoardSiteModel.FK_UserDetails_AspNetUsers">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="UserDetail" EntitySet="UserDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OpenPositions_Positions" Association="JobBoardSiteModel.FK_OpenPositions_Positions">
+      <End Role="Position" EntitySet="Positions" />
+      <End Role="OpenPosition" EntitySet="OpenPositions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SavedJobs_Positions" Association="JobBoardSiteModel.FK_SavedJobs_Positions">
+      <End Role="Position" EntitySet="Positions" />
+      <End Role="SavedJob" EntitySet="SavedJobs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SavedJobs_UserDetails" Association="JobBoardSiteModel.FK_SavedJobs_UserDetails">
+      <End Role="UserDetail" EntitySet="UserDetails" />
+      <End Role="SavedJob" EntitySet="SavedJobs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ApplicationStatu">
+    <Key>
+      <PropertyRef Name="ApplicationStatusID" />
+    </Key>
+    <Property Name="ApplicationStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ApplicationStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Applications" Relationship="JobBoardSiteModel.FK_Applications_ApplicationStatus" FromRole="ApplicationStatu" ToRole="Application" />
+  </EntityType>
+  <EntityType Name="Application">
+    <Key>
+      <PropertyRef Name="ApplicationID" />
+    </Key>
+    <Property Name="ApplicationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OpenPositionID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ApplicationDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ManagerNotes" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <Property Name="ApplicationStatusID" Type="Int32" Nullable="false" />
+    <Property Name="ResumeFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ApplicationStatu" Relationship="JobBoardSiteModel.FK_Applications_ApplicationStatus" FromRole="Application" ToRole="ApplicationStatu" />
+    <NavigationProperty Name="OpenPosition" Relationship="JobBoardSiteModel.FK_Applications_OpenPositions" FromRole="Application" ToRole="OpenPosition" />
+    <NavigationProperty Name="UserDetail" Relationship="JobBoardSiteModel.FK_Applications_UserDetails" FromRole="Application" ToRole="UserDetail" />
+  </EntityType>
+  <Association Name="FK_Applications_ApplicationStatus">
+    <End Type="JobBoardSiteModel.ApplicationStatu" Role="ApplicationStatu" Multiplicity="1" />
+    <End Type="JobBoardSiteModel.Application" Role="Application" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ApplicationStatu">
+        <PropertyRef Name="ApplicationStatusID" />
+      </Principal>
+      <Dependent Role="Application">
+        <PropertyRef Name="ApplicationStatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Applications_OpenPositions">
+    <End Type="JobBoardSiteModel.OpenPosition" Role="OpenPosition" Multiplicity="1" />
+    <End Type="JobBoardSiteModel.Application" Role="Application" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OpenPosition">
+        <PropertyRef Name="OpenPositionID" />
+      </Principal>
+      <Dependent Role="Application">
+        <PropertyRef Name="OpenPositionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="PositionID" />
+    </Key>
+    <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="JobDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="OpenPositions" Relationship="JobBoardSiteModel.FK_OpenPositions_Positions" FromRole="Position" ToRole="OpenPosition" />
+    <NavigationProperty Name="SavedJobs" Relationship="JobBoardSiteModel.FK_SavedJobs_Positions" FromRole="Position" ToRole="SavedJob" />
+  </EntityType>
+  <EntityType Name="SavedJob">
+    <Key>
+      <PropertyRef Name="SavedJobID" />
+    </Key>
+    <Property Name="SavedJobID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="PositionID" Type="Int32" />
+    <NavigationProperty Name="Position" Relationship="JobBoardSiteModel.FK_SavedJobs_Positions" FromRole="SavedJob" ToRole="Position" />
+    <NavigationProperty Name="UserDetail" Relationship="JobBoardSiteModel.FK_SavedJobs_UserDetails" FromRole="SavedJob" ToRole="UserDetail" />
+  </EntityType>
+  <EntityType Name="UserDetail">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ResumeFileName" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Applications" Relationship="JobBoardSiteModel.FK_Applications_UserDetails" FromRole="UserDetail" ToRole="Application" />
+    <NavigationProperty Name="AspNetUser" Relationship="JobBoardSiteModel.FK_UserDetails_AspNetUsers" FromRole="UserDetail" ToRole="AspNetUser" />
+    <NavigationProperty Name="SavedJobs" Relationship="JobBoardSiteModel.FK_SavedJobs_UserDetails" FromRole="UserDetail" ToRole="SavedJob" />
+  </EntityType>
+  <Association Name="FK_Applications_UserDetails">
+    <End Type="JobBoardSiteModel.UserDetail" Role="UserDetail" Multiplicity="1" />
+    <End Type="JobBoardSiteModel.Application" Role="Application" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Application">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDetails_AspNetUsers">
+    <End Type="JobBoardSiteModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="JobBoardSiteModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserDetail">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OpenPositions_Positions">
+    <End Type="JobBoardSiteModel.Position" Role="Position" Multiplicity="1" />
+    <End Type="JobBoardSiteModel.OpenPosition" Role="OpenPosition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="PositionID" />
+      </Principal>
+      <Dependent Role="OpenPosition">
+        <PropertyRef Name="PositionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SavedJobs_Positions">
+    <End Type="JobBoardSiteModel.Position" Role="Position" Multiplicity="0..1" />
+    <End Type="JobBoardSiteModel.SavedJob" Role="SavedJob" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="PositionID" />
+      </Principal>
+      <Dependent Role="SavedJob">
+        <PropertyRef Name="PositionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SavedJobs_UserDetails">
+    <End Type="JobBoardSiteModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+    <End Type="JobBoardSiteModel.SavedJob" Role="SavedJob" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SavedJob">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JobBoardSiteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="ApplicationID" />
+          </Key>
+          <Property Name="ApplicationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OpenPositionID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ApplicationDate" Type="date" Nullable="false" />
+          <Property Name="ManagerNotes" Type="varchar" MaxLength="2000" />
+          <Property Name="ApplicationStatusID" Type="int" Nullable="false" />
+          <Property Name="ResumeFileName" Type="varchar" MaxLength="75" />
+        </EntityType>
+        <EntityType Name="ApplicationStatus">
+          <Key>
+            <PropertyRef Name="ApplicationStatusID" />
+          </Key>
+          <Property Name="ApplicationStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApplicationStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Locations">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StoreNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="ManagerID" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OpenPositions">
+          <Key>
+            <PropertyRef Name="OpenPositionID" />
+          </Key>
+          <Property Name="OpenPositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Positions">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="JobDescription" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="SavedJobs">
+          <Key>
+            <PropertyRef Name="SavedJobID" />
+          </Key>
+          <Property Name="SavedJobID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+          <Property Name="PositionID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserDetails">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ResumeFileName" Type="varchar" MaxLength="75" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Applications_ApplicationStatus">
+          <End Role="ApplicationStatus" Type="Self.ApplicationStatus" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationStatus">
+              <PropertyRef Name="ApplicationStatusID" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="ApplicationStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_OpenPositions">
+          <End Role="OpenPositions" Type="Self.OpenPositions" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OpenPositions">
+              <PropertyRef Name="OpenPositionID" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="OpenPositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_UserDetails">
+          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetails">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OpenPositions_Locations">
+          <End Role="Locations" Type="Self.Locations" Multiplicity="1" />
+          <End Role="OpenPositions" Type="Self.OpenPositions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="LocationID" />
+            </Principal>
+            <Dependent Role="OpenPositions">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OpenPositions_Positions">
+          <End Role="Positions" Type="Self.Positions" Multiplicity="1" />
+          <End Role="OpenPositions" Type="Self.OpenPositions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Positions">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="OpenPositions">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavedJobs_Positions">
+          <End Role="Positions" Type="Self.Positions" Multiplicity="0..1" />
+          <End Role="SavedJobs" Type="Self.SavedJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Positions">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="SavedJobs">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavedJobs_UserDetails">
+          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="0..1" />
+          <End Role="SavedJobs" Type="Self.SavedJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetails">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SavedJobs">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDetails_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserDetails">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobBoardSiteModelStoreContainer">
+          <EntitySet Name="Applications" EntityType="Self.Applications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApplicationStatus" EntityType="Self.ApplicationStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Locations" EntityType="Self.Locations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OpenPositions" EntityType="Self.OpenPositions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Positions" EntityType="Self.Positions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SavedJobs" EntityType="Self.SavedJobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Applications_ApplicationStatus" Association="Self.FK_Applications_ApplicationStatus">
+            <End Role="ApplicationStatus" EntitySet="ApplicationStatus" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_OpenPositions" Association="Self.FK_Applications_OpenPositions">
+            <End Role="OpenPositions" EntitySet="OpenPositions" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_UserDetails" Association="Self.FK_Applications_UserDetails">
+            <End Role="UserDetails" EntitySet="UserDetails" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OpenPositions_Locations" Association="Self.FK_OpenPositions_Locations">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="OpenPositions" EntitySet="OpenPositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OpenPositions_Positions" Association="Self.FK_OpenPositions_Positions">
+            <End Role="Positions" EntitySet="Positions" />
+            <End Role="OpenPositions" EntitySet="OpenPositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavedJobs_Positions" Association="Self.FK_SavedJobs_Positions">
+            <End Role="Positions" EntitySet="Positions" />
+            <End Role="SavedJobs" EntitySet="SavedJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavedJobs_UserDetails" Association="Self.FK_SavedJobs_UserDetails">
+            <End Role="UserDetails" EntitySet="UserDetails" />
+            <End Role="SavedJobs" EntitySet="SavedJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="UserDetails" EntitySet="UserDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JobBoardSiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserDetail" Relationship="JobBoardSiteModel.FK_UserDetails_AspNetUsers" FromRole="AspNetUser" ToRole="UserDetail" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StoreNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ManagerID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="OpenPositions" Relationship="Self.FK_OpenPositions_Locations" FromRole="Locations" ToRole="OpenPositions" />
+        </EntityType>
+        <EntityType Name="OpenPosition">
+          <Key>
+            <PropertyRef Name="OpenPositionID" />
+          </Key>
+          <Property Name="OpenPositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PositionID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Location" Relationship="Self.FK_OpenPositions_Locations" FromRole="OpenPositions" ToRole="Locations" />
+          <NavigationProperty Name="Applications" Relationship="JobBoardSiteModel.FK_Applications_OpenPositions" FromRole="OpenPosition" ToRole="Application" />
+          <NavigationProperty Name="Position" Relationship="JobBoardSiteModel.FK_OpenPositions_Positions" FromRole="OpenPosition" ToRole="Position" />
+        </EntityType>
+        <Association Name="FK_OpenPositions_Locations">
+          <End Role="Locations" Type="Self.Location" Multiplicity="1" />
+          <End Role="OpenPositions" Type="Self.OpenPosition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="LocationID" />
+            </Principal>
+            <Dependent Role="OpenPositions">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobBoardSiteEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="Locations" EntityType="Self.Location" />
+          <EntitySet Name="OpenPositions" EntityType="Self.OpenPosition" />
+          <AssociationSet Name="FK_OpenPositions_Locations" Association="Self.FK_OpenPositions_Locations">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="OpenPositions" EntitySet="OpenPositions" />
+          </AssociationSet>
+          <EntitySet Name="ApplicationStatus" EntityType="JobBoardSiteModel.ApplicationStatu" />
+          <EntitySet Name="Applications" EntityType="JobBoardSiteModel.Application" />
+          <AssociationSet Name="FK_Applications_ApplicationStatus" Association="JobBoardSiteModel.FK_Applications_ApplicationStatus">
+            <End Role="ApplicationStatu" EntitySet="ApplicationStatus" />
+            <End Role="Application" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Applications_OpenPositions" Association="JobBoardSiteModel.FK_Applications_OpenPositions">
+            <End Role="OpenPosition" EntitySet="OpenPositions" />
+            <End Role="Application" EntitySet="Applications" />
+          </AssociationSet>
+          <EntitySet Name="Positions" EntityType="JobBoardSiteModel.Position" />
+          <EntitySet Name="SavedJobs" EntityType="JobBoardSiteModel.SavedJob" />
+          <EntitySet Name="UserDetails" EntityType="JobBoardSiteModel.UserDetail" />
+          <AssociationSet Name="FK_Applications_UserDetails" Association="JobBoardSiteModel.FK_Applications_UserDetails">
+            <End Role="UserDetail" EntitySet="UserDetails" />
+            <End Role="Application" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="JobBoardSiteModel.FK_UserDetails_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="UserDetail" EntitySet="UserDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OpenPositions_Positions" Association="JobBoardSiteModel.FK_OpenPositions_Positions">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="OpenPosition" EntitySet="OpenPositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavedJobs_Positions" Association="JobBoardSiteModel.FK_SavedJobs_Positions">
+            <End Role="Position" EntitySet="Positions" />
+            <End Role="SavedJob" EntitySet="SavedJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavedJobs_UserDetails" Association="JobBoardSiteModel.FK_SavedJobs_UserDetails">
+            <End Role="UserDetail" EntitySet="UserDetails" />
+            <End Role="SavedJob" EntitySet="SavedJobs" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="ApplicationStatu">
+          <Key>
+            <PropertyRef Name="ApplicationStatusID" />
+          </Key>
+          <Property Name="ApplicationStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Applications" Relationship="JobBoardSiteModel.FK_Applications_ApplicationStatus" FromRole="ApplicationStatu" ToRole="Application" />
+        </EntityType>
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="ApplicationID" />
+          </Key>
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OpenPositionID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ApplicationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ManagerNotes" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="ApplicationStatusID" Type="Int32" Nullable="false" />
+          <Property Name="ResumeFileName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ApplicationStatu" Relationship="JobBoardSiteModel.FK_Applications_ApplicationStatus" FromRole="Application" ToRole="ApplicationStatu" />
+          <NavigationProperty Name="OpenPosition" Relationship="JobBoardSiteModel.FK_Applications_OpenPositions" FromRole="Application" ToRole="OpenPosition" />
+          <NavigationProperty Name="UserDetail" Relationship="JobBoardSiteModel.FK_Applications_UserDetails" FromRole="Application" ToRole="UserDetail" />
+        </EntityType>
+        <Association Name="FK_Applications_ApplicationStatus">
+          <End Type="JobBoardSiteModel.ApplicationStatu" Role="ApplicationStatu" Multiplicity="1" />
+          <End Type="JobBoardSiteModel.Application" Role="Application" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationStatu">
+              <PropertyRef Name="ApplicationStatusID" />
+            </Principal>
+            <Dependent Role="Application">
+              <PropertyRef Name="ApplicationStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Applications_OpenPositions">
+          <End Type="JobBoardSiteModel.OpenPosition" Role="OpenPosition" Multiplicity="1" />
+          <End Type="JobBoardSiteModel.Application" Role="Application" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OpenPosition">
+              <PropertyRef Name="OpenPositionID" />
+            </Principal>
+            <Dependent Role="Application">
+              <PropertyRef Name="OpenPositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="JobDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OpenPositions" Relationship="JobBoardSiteModel.FK_OpenPositions_Positions" FromRole="Position" ToRole="OpenPosition" />
+          <NavigationProperty Name="SavedJobs" Relationship="JobBoardSiteModel.FK_SavedJobs_Positions" FromRole="Position" ToRole="SavedJob" />
+        </EntityType>
+        <EntityType Name="SavedJob">
+          <Key>
+            <PropertyRef Name="SavedJobID" />
+          </Key>
+          <Property Name="SavedJobID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PositionID" Type="Int32" />
+          <NavigationProperty Name="Position" Relationship="JobBoardSiteModel.FK_SavedJobs_Positions" FromRole="SavedJob" ToRole="Position" />
+          <NavigationProperty Name="UserDetail" Relationship="JobBoardSiteModel.FK_SavedJobs_UserDetails" FromRole="SavedJob" ToRole="UserDetail" />
+        </EntityType>
+        <EntityType Name="UserDetail">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ResumeFileName" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Applications" Relationship="JobBoardSiteModel.FK_Applications_UserDetails" FromRole="UserDetail" ToRole="Application" />
+          <NavigationProperty Name="AspNetUser" Relationship="JobBoardSiteModel.FK_UserDetails_AspNetUsers" FromRole="UserDetail" ToRole="AspNetUser" />
+          <NavigationProperty Name="SavedJobs" Relationship="JobBoardSiteModel.FK_SavedJobs_UserDetails" FromRole="UserDetail" ToRole="SavedJob" />
+        </EntityType>
+        <Association Name="FK_Applications_UserDetails">
+          <End Type="JobBoardSiteModel.UserDetail" Role="UserDetail" Multiplicity="1" />
+          <End Type="JobBoardSiteModel.Application" Role="Application" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetail">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Application">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDetails_AspNetUsers">
+          <End Type="JobBoardSiteModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="JobBoardSiteModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserDetail">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OpenPositions_Positions">
+          <End Type="JobBoardSiteModel.Position" Role="Position" Multiplicity="1" />
+          <End Type="JobBoardSiteModel.OpenPosition" Role="OpenPosition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="OpenPosition">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavedJobs_Positions">
+          <End Type="JobBoardSiteModel.Position" Role="Position" Multiplicity="0..1" />
+          <End Type="JobBoardSiteModel.SavedJob" Role="SavedJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="PositionID" />
+            </Principal>
+            <Dependent Role="SavedJob">
+              <PropertyRef Name="PositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavedJobs_UserDetails">
+          <End Type="JobBoardSiteModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+          <End Type="JobBoardSiteModel.SavedJob" Role="SavedJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetail">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SavedJob">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JobBoardSiteModelStoreContainer" CdmEntityContainer="JobBoardSiteEntities">
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.Location">
+              <MappingFragment StoreEntitySet="Locations">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="StoreNumber" ColumnName="StoreNumber" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OpenPositions">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.OpenPosition">
+              <MappingFragment StoreEntitySet="OpenPositions">
+                <ScalarProperty Name="OpenPositionID" ColumnName="OpenPositionID" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApplicationStatus">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.ApplicationStatu">
+              <MappingFragment StoreEntitySet="ApplicationStatus">
+                <ScalarProperty Name="ApplicationStatus" ColumnName="ApplicationStatus" />
+                <ScalarProperty Name="ApplicationStatusID" ColumnName="ApplicationStatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.Application">
+              <MappingFragment StoreEntitySet="Applications">
+                <ScalarProperty Name="ResumeFileName" ColumnName="ResumeFileName" />
+                <ScalarProperty Name="ApplicationStatusID" ColumnName="ApplicationStatusID" />
+                <ScalarProperty Name="ManagerNotes" ColumnName="ManagerNotes" />
+                <ScalarProperty Name="ApplicationDate" ColumnName="ApplicationDate" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OpenPositionID" ColumnName="OpenPositionID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.Position">
+              <MappingFragment StoreEntitySet="Positions">
+                <ScalarProperty Name="JobDescription" ColumnName="JobDescription" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SavedJobs">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.SavedJob">
+              <MappingFragment StoreEntitySet="SavedJobs">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SavedJobID" ColumnName="SavedJobID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserDetails">
+            <EntityTypeMapping TypeName="JobBoardSiteModel.UserDetail">
+              <MappingFragment StoreEntitySet="UserDetails">
+                <ScalarProperty Name="ResumeFileName" ColumnName="ResumeFileName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

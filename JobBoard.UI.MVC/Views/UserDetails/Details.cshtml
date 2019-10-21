@@ -1,0 +1,154 @@
+﻿@model JobBoard.DATA.EF.UserDetail
+@using JobBoard.DATA.EF
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Details";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">User Details</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="/UserDetails">UserDetails</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>@ViewBag.Title</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row" style="width:50%; margin: auto; border: 1px solid lightgray;padding: 10px; box-shadow: 10px 10px">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <h2>User Details</h2>
+
+                <div>
+
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            First Name
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.FirstName)
+                        </dd>
+
+                        <dt>
+                            Last Name
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.LastName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ResumeFileName)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ResumeFileName)</br>
+                            <a target="_blank" href="~/Content/resumes/@Html.DisplayFor(model => model.ResumeFileName)">Link to Resume</a>
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.AspNetUser.Email)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.AspNetUser.Email)
+                        </dd>
+                        <input type="button" value="Application Status" class="btn btn-info" id="hideshow" />
+                        <div id="content" style="display:none;">
+                            <dt>
+                                Application Status
+                            </dt>
+
+                            <dd>
+                                @{
+                                    JobBoardSiteEntities db = new JobBoardSiteEntities();
+                                    string user = User.Identity.GetUserId();
+                                    var apps = db.Applications.Where(app => app.UserID == user);
+
+                                    foreach (var a in apps)
+                                    {
+                                <span>@a.OpenPosition.Position.Title</span>
+
+
+                                var ap = a.ApplicationStatu.ApplicationStatus;
+                                switch (ap)
+                                {
+                                    case "Pending":
+                                        
+                                        <span style="border-radius:5px; background-color:gray; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
+                                        <br />
+                                        break;
+                                    case "Approved":
+                                        
+                                        <span style="border-radius:5px; background-color:#89ba16; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
+                                        <br />
+                                        break;
+                                    case "Declined":
+                                       
+                                        <span style="border-radius:5px; background-color:red; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
+                                        <br />
+                                        break;
+
+                                }
+                                <br />
+                                
+                            }
+                                }
+
+                                </dd>
+                        </div>
+
+
+                        <input type="button" value="Saved Jobs" class="btn btn-info" id="hideshowJob" />
+                        <div id="contentJob" style="display:none;">
+                            <dt>
+                                Saved Jobs
+                            </dt>
+                            <dd>
+                                @{
+                                    JobBoardSiteEntities ctx = new JobBoardSiteEntities();
+                                    string userID = User.Identity.GetUserId();
+                                    UserDetail currentUser = db.UserDetails.Where(ud => ud.UserID == userID).FirstOrDefault();
+
+                                    var sth = db.SavedJobs.Where(a => a.UserID == currentUser.UserID);
+                                    foreach (var x in sth)
+                                    {
+                                        <a href="/OpenPositions/Details/@x.SavedJobID">@x.Title</a><br />
+                                    }
+                                }
+                            </dd>
+                        </div>
+                        </dl>
+                    </div>
+                    <p>
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }, new { @class = "btn btn-primary" })
+                        @if (User.IsInRole("Admin,Manager"))
+                        {
+                            @Html.ActionLink("Back to List", "Index")
+
+                        }
+                    </p>
+                </div>
+            </div>
+            </div>
+        </section>
+        @section scripts{
+            <script>
+                $('#hideshow').on('click', function (event) {
+                    $('#content').toggle('700');
+                });
+
+                $('#hideshowJob').on('click', function (event) {
+                    $('#contentJob').toggle('700');
+                });
+
+            </script>
+
+        }

@@ -1,0 +1,130 @@
+﻿@model PagedList.IPagedList<JobBoard.DATA.EF.Position>
+@using System;
+@using PagedList.Mvc
+@using JobBoard.DATA.EF;
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Index";
+}
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('/Content/images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Find Job</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="/Home/Index">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="/Home/Positions">Positions</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>@ViewBag.Title</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" id="next-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <h2>Awaiting Position</h2>
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                }
+
+
+                @using (Html.BeginForm("Index", "Positions", FormMethod.Get))
+                {
+                    <div style="border:2px solid lightblue; margin-top:10px;margin-bottom:10px;padding:15px">
+                        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                        <input type="submit" value="Search" />
+                    </div>
+
+                }
+                <span style="margin-top:10px; margin-bottom:10px;">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, currentFilter = ViewBag.CurrentFilter }))
+                </span>
+
+                @if (Model.Count() > 0)
+                {
+                    <table id="myTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Title
+                                </th>
+                                <th>
+                                    Job Description
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a style="color:black; font-weight:bold;"  href="/Positions/Details/@item.PositionID"> @Html.DisplayFor(modelItem => item.Title)</a>
+                                    </td>
+                                    <td style="width:300px">
+
+                                        @*@item.JobDescription.Substring(0, Math.Min(item.JobDescription.Length, 200)) ...*@
+
+
+
+                                        @Html.Raw(item.JobDescription.Substring(0, Math.Min(item.JobDescription.Length, 200))) ...
+
+
+                                    </td>
+                                    <td>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                                        {
+                                            <span class="float-right" style="margin-left:10px; margin-right:10px">
+                                                @Html.ActionLink("Edit", "Edit", new { id = item.PositionID }, new { @class = "btn btn-primary" })
+                                            </span>
+                                            <span class="float-right" style="margin-left:10px; margin-right:10px"> @Html.ActionLink("Delete", "Delete", new { id = item.PositionID }, new { @class = "btn btn-danger" })</span>
+
+                                        }
+                                        <span class="float-right" style="margin-left:10px; margin-right:10px"> @Html.ActionLink("Details", "Details", new { id = item.PositionID }, new { @class = "btn btn-warning " })</span>
+
+
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+                }
+                else
+                {
+                    <p>Sorry your criteria did not return any result.Please try again or or hit "Go!" to refresh the page</p>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    @*<script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+
+            });
+
+        </script>*@
+    @*<script type="text/javascript">
+        function deactive(data) {
+
+
+            $('#oneClick' + data.id).addClass('disabled').text('Applied');
+
+
+        }
+    </script>*@
+
+
+}

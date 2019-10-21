@@ -1,0 +1,87 @@
+﻿fieldset {
+    background-color: rgba(196, 189, 188, 0.3);
+    border-radius: 4px;
+   
+}
+fieldset.adminSetting {
+    margin-bottom: 50px;
+    }
+legend {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: var(--green);
+    font-size: 17px;
+    font-weight: bold;
+    padding: 3px 5px 3px 7px;
+    width: auto;
+   
+}
+
+.AddminBtn a {
+    text-decoration: none;
+    color: white;
+}
+
+.section-hero.inner-page, .section-hero.inner-page > .container > .row {
+    padding-top: 80px;
+    padding-bottom: 30px;
+}
+
+.loginPartial {
+    border: 1px solid rgba(196, 189, 188, 0.3);
+    background-color: #89ba16;
+    padding: 10px;
+    margin: 10px;
+}
+.loginPartial:hover {
+    background-color: white;
+    transition:0.5s;
+}
+    .loginPartial a {
+        color: white;
+    }
+.btn.loginPartial a{
+    color: white;
+}
+.loginPartial a:hover {
+    color: #89ba16;
+    text-decoration: none;
+}
+
+.login-container {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.login-form-1 {
+    padding: 5%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+
+    .login-form-1 h2 {
+        text-align: center;
+        color: #333;
+    }
+
+.login-container form {
+    padding: 10%;
+}
+
+.btnSubmit {
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+}
+
+.login-form-1 .btnSubmit {
+    font-weight: 600;
+    color: #fff;
+    background-color: #0062cc;
+}
+#checkMark {
+    font-size: 30px;
+    color: greenyellow;
+}
