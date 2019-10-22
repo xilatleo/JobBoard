@@ -28,6 +28,17 @@
                     <hr />
                     <dl class="dl-horizontal">
                         <dt>
+                            @Html.Label("Position Name", htmlAttributes: new { @class = "control-label" })
+                        </dt>
+                        <dd>
+                            @Model.OpenPosition.Position.Title
+                        </dd>
+                        <dt>
+                            @Html.Label("Location", htmlAttributes: new { @class = "control-label" })
+                        </dt>
+                        <dd>
+                            @Model.OpenPosition.Location.City
+                        <dt>
                             @Html.DisplayNameFor(model => model.ApplicationDate)
                         </dt>
 
@@ -49,6 +60,7 @@
 
                         <dd>
                             @Html.DisplayFor(model => model.ResumeFileName)
+                            <a target="_blank" href="~/Content/resumes/@Html.DisplayFor(model => model.ResumeFileName)">Link to Resume</a>
                         </dd>
 
                         <dt>
@@ -78,10 +90,10 @@
                     </dl>
                 </div>
                 <p>
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationID },new {@class="btn btn-primary" }) 
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationID }, new { @class = "btn btn-primary" })
                     @Html.ActionLink("Back to List", "Index")
                 </p>
-</div>
-</div>
-</div>
+            </div>
+        </div>
+    </div>
 </section>

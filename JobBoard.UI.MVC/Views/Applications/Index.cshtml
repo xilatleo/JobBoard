@@ -22,10 +22,13 @@
         <div class="row">
             <div class="col-lg-12 mb-5 mb-lg-0">
                 <h2>Index</h2>
+                @if (User.IsInRole("Admin"))
+                {
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                }
 
-                <p>
-                    @Html.ActionLink("Create New", "Create")
-                </p>
                 @using (Html.BeginForm("Index", "Applications", FormMethod.Post))
                 {
                     <button style="margin:10px;" type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-o"></i> Delete</button>
@@ -37,20 +40,22 @@
                                 <th>
                                     Full Name
                                 </th>
+                                <th style="width: 150px">
+                                    @Html.DisplayNameFor(model => model.OpenPosition.Position.Title)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.OpenPosition.LocationID)
+                                </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.ApplicationDate)
                                 </th>
 
 
-                                <th>
+                                <th style="width: 100px">
                                     @Html.DisplayNameFor(model => model.ApplicationStatu.ApplicationStatus)
                                 </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.OpenPosition.OpenPositionID)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ManagerNotes)
-                                </th>
+
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -60,11 +65,17 @@
                             {
                                 <tr>
                                     @*<td>
-                                <input type="checkbox" name="DeleteConfirmed" value="@item.ApplicationID" />
-                            </td>*@
+                                            <input type="checkbox" name="DeleteConfirmed" value="@item.ApplicationID" />
+                                        </td>*@
                                     <td><input type="checkbox" name="ID" value="@item.ApplicationID" class="custom-checkbox chkCheckBoxId" /></td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.UserDetail.FullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OpenPosition.Position.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OpenPosition.Location.City)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ApplicationDate)
@@ -74,12 +85,8 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ApplicationStatu.ApplicationStatus)
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OpenPosition.OpenPositionID)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ManagerNotes)
-                                    </td>
+
+
                                     <td>
                                         @Html.ActionLink("Edit", "Edit", new { id = item.ApplicationID }, new { @class = "btn btn-primary" })
                                         @Html.ActionLink("Details", "Details", new { id = item.ApplicationID }, new { @class = "btn btn-warning" })

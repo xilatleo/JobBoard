@@ -47,7 +47,7 @@ namespace JobBoard.UI.MVC.Controllers
         //}
 
         // GET: Applications/Create
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.ApplicationStatusID = new SelectList(db.ApplicationStatus, "ApplicationStatusID", "ApplicationStatus");
