@@ -172,8 +172,19 @@ namespace JobBoard.UI.MVC.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        
 
+        [HttpPost]
+        public JsonResult delSavedJob(int id)
+        {
+            string userID = User.Identity.GetUserId();
+            UserDetail currentUser = db.UserDetails.Where(ud => ud.UserID == userID).FirstOrDefault();
+
+            SavedJob savedJob = db.SavedJobs.Find(id);
+            db.SavedJobs.Remove(savedJob);
+            db.SaveChanges();
+            string confirmMessage = string.Format("You have just delete '{0}'!", savedJob.Title);
+            return Json(new { id = id, message = confirmMessage });
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

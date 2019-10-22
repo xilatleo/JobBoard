@@ -74,35 +74,35 @@
 
                                     foreach (var a in apps)
                                     {
-                                <span>@a.OpenPosition.Position.Title</span>
+                                        <span>@a.OpenPosition.Position.Title</span>
 
 
-                                var ap = a.ApplicationStatu.ApplicationStatus;
-                                switch (ap)
-                                {
-                                    case "Pending":
-                                        
-                                        <span style="border-radius:5px; background-color:gray; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
-                                        <br />
-                                        break;
-                                    case "Approved":
-                                        
-                                        <span style="border-radius:5px; background-color:#89ba16; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
-                                        <br />
-                                        break;
-                                    case "Declined":
-                                       
-                                        <span style="border-radius:5px; background-color:red; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
-                                        <br />
-                                        break;
+                                        var ap = a.ApplicationStatu.ApplicationStatus;
+                                        switch (ap)
+                                        {
+                                            case "Pending":
 
+                                                <span style="border-radius:5px; background-color:gray; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
+                                                <br />
+                                                break;
+                                            case "Approved":
+
+                                                <span style="border-radius:5px; background-color:#89ba16; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
+                                                <br />
+                                                break;
+                                            case "Declined":
+
+                                                <span style="border-radius:5px; background-color:red; color: white; padding: 5px;"> @a.ApplicationStatu.ApplicationStatus</span>
+                                                <br />
+                                                break;
+
+                                        }
+                                        <br />
+
+                                    }
                                 }
-                                <br />
-                                
-                            }
-                                }
 
-                                </dd>
+                            </dd>
                         </div>
 
 
@@ -120,35 +120,59 @@
                                     var sth = db.SavedJobs.Where(a => a.UserID == currentUser.UserID);
                                     foreach (var x in sth)
                                     {
-                                        <a href="/OpenPositions/Details/@x.SavedJobID">@x.Title</a><br />
+                                        <a href="/OpenPositions/Details/@x.SavedJobID" id="saveJobTitle">@x.Title</a>
+                                        @Ajax.ActionLink("Delete", "delSavedJob", new { id = x.SavedJobID }, new AjaxOptions
+                                                      {
+                                                          HttpMethod = "POST",
+                                                          //Confirm = "Are you sure you want to apply for " + item.Position.Title + "?",
+                                                          OnSuccess = "deactive",
+
+                                                      }, new { @class = "btn btn-danger btn-sm", id = "delSaveJob" + x.SavedJobID, style = "margin-left:10px; margin-right:10px" })<br /><br />
                                     }
                                 }
                             </dd>
                         </div>
-                        </dl>
-                    </div>
-                    <p>
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }, new { @class = "btn btn-primary" })
-                        @if (User.IsInRole("Admin,Manager"))
-                        {
-                            @Html.ActionLink("Back to List", "Index")
-
-                        }
-                    </p>
+                    </dl>
                 </div>
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }, new { @class = "btn btn-primary" })
+                    @if (User.IsInRole("Admin,Manager"))
+                    {
+                        @Html.ActionLink("Back to List", "Index")
+
+                    }
+                </p>
             </div>
-            </div>
-        </section>
-        @section scripts{
-            <script>
-                $('#hideshow').on('click', function (event) {
-                    $('#content').toggle('700');
-                });
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script>
+        $('#hideshow').on('click', function (event) {
+            $('#content').toggle('700');
+        });
 
-                $('#hideshowJob').on('click', function (event) {
-                    $('#contentJob').toggle('700');
-                });
+        $('#hideshowJob').on('click', function (event) {
+            $('#contentJob').toggle('700');
+        });
 
-            </script>
+    </script>
+    <script type="text/javascript">
+        function deactive(data) {
 
+            Swal.fire({
+
+                type: 'success',
+                title: 'You have succesfully deleted this saved job',
+                showConfirmButton: false,
+
+            })
+                .then()
+            {
+                $('#delSaveJob' + data.id).remove();
+                $('#saveJobTitle').remove();
+            }
         }
+    </script>
+
+}

@@ -109,7 +109,7 @@ namespace JobBoard.UI.MVC.Controllers
             OpenPosition openPosition = db.OpenPositions.Find(id);
             if (openPosition == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("OpenPositionsError", "CustomError");
             }
             return View(openPosition);
         }
@@ -295,7 +295,7 @@ namespace JobBoard.UI.MVC.Controllers
             string confirmMessage = string.Format("You have just saved '{0}'!", position.Title);
             return Json(new { id = id, message = confirmMessage });
         }
-
+      
 
 
         protected override void Dispose(bool disposing)
