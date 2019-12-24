@@ -4,7 +4,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>JobBoard &mdash; A website for your future carreer</title>
+    <title>JobBoard | A website for your future carreer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="" />
@@ -26,7 +26,16 @@
     <link rel="stylesheet" href="~/Content/css/style.css">
     <link href="~/Content/css/custom.css" rel="stylesheet" />
     <link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-   
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150480937-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-150480937-1');
+    </script>
+
 </head>
 <body id="top">
     <div id="overlayer"></div>
@@ -50,38 +59,35 @@
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="site-logo col-6"><a href="@Url.Action("Index","Home")">Quan's JobBoard</a></div>
-                    <nav class="mx-auto site-navigation ">
+                    <nav class="mx-auto site-navigation " id="menu">
                         <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                            <li><a href="@Url.Action("Index","Home")" class="nav-link active">Home</a></li>
+                            <li><a href="@Url.Action("Index","Home")">HOME</a></li>
 
 
-                            <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                            <li><a href="@Url.Action("Contact","Home")">CONTACT</a></li>
                             @*<li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>*@
                             @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                             {
-                                <li><a href="@Url.Action("AdminPanel","Home")">Admin Panel</a></li>
+                                <li><a href="@Url.Action("AdminPanel","Home")">ADMIN PANEL</a></li>
                             }
 
 
-                            <li><a href="@Url.Action("Index","OpenPositions")">Find Job</a></li>
+                            <li><a href="@Url.Action("Index","OpenPositions")">FIND JOB</a></li>
                             @if (Request.IsAuthenticated)
                             {
                                 JobBoardSiteEntities db = new JobBoardSiteEntities();
                                 string userID = User.Identity.GetUserId();
                                 UserDetail currentUser = db.UserDetails.Where(ud => ud.UserID == userID).FirstOrDefault();
-                                <li><a href="/UserDetails/Details/@userID">Your Profile</a></li>
+                                <li><a href="/UserDetails/Details/@userID">YOUR PROFILE</a></li>
                             }
 
-
+                            <li><a href="~/Content/FinalDocx_FN.pdf" target="_blank">DOC</a></li>
                         </ul>
+
                     </nav>
 
-                    <span class="right-cta-menu text-right d-flex aligin-items-center col-6">
-                        <div class="ml-auto">
-
-                            @Html.Partial("_LoginPartial")
-
-                        </div>
+                    <span class="text-right col-12">
+                        @Html.Partial("_LoginPartial")
 
 
                         <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
@@ -100,12 +106,12 @@
                     <div class="col-6 col-md-3 mb-4 mb-md-0">
                         <h3>Search Trending</h3>
                         <ul class="list-unstyled">
-                            <li><a href="/Positions?SearchString=Sales Associate">Sales Associate</a></li>
-                            <li><a href="/Positions?SearchString=Developer">Mobile Developer</a></li>
-                            <li><a href="/Positions?SearchString=Developer">Web Developers</a></li>
-                            <li><a href="/Positions?SearchString=Technician">Technician</a></li>
-                            <li><a href="/Positions?SearchString=Chef">Chef</a></li>
-                            <li><a href="/Positions?SearchString=Marketing">Marketing</a></li>
+                            <li><a href="/OpenPositions?SearchString=Sales Associate" target="_blank">Sales Associate</a></li>
+                            <li><a href="/OpenPositions?SearchString=Developer" target="_blank">Mobile Developer</a></li>
+                            <li><a href="/OpenPositions?SearchString=Developer" target="_blank">Web Developers</a></li>
+                            <li><a href="/OpenPositions?SearchString=Technician" target="_blank">Technician</a></li>
+                            <li><a href="/OpenPositions?SearchString=Chef" target="_blank">Chef</a></li>
+                            <li><a href="/OpenPositions?SearchString=Marketing" target="_blank">Marketing</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3 mb-4 mb-md-0">
@@ -128,10 +134,10 @@
                     <div class="col-6 col-md-3 mb-4 mb-md-0">
                         <h3>Contact Us</h3>
                         <div class="footer-social">
-                            <a href="#"><span class="icon-facebook"></span></a>
-                            <a href="#"><span class="icon-twitter"></span></a>
-                            <a href="#"><span class="icon-instagram"></span></a>
-                            <a href="#"><span class="icon-linkedin"></span></a>
+                            <a href="https://www.facebook.com/"><span class="icon-facebook"></span></a>
+                            <a href="https://twitter.com/"><span class="icon-twitter"></span></a>
+                            <a href="https://www.instagram.com/"><span class="icon-instagram"></span></a>
+                            <a href="https://www.linkedin.com/"><span class="icon-linkedin"></span></a>
                         </div>
                     </div>
                 </div>
@@ -172,9 +178,18 @@
     <!-- ADDED jQuery Ajax CDN-->
     <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script>
+        $(function () {
+            $('#menu ul li').each(function () {
+                if ($(this).find('a').attr('href') == window.location.pathname) {
+                    $(this).find('a').addClass('active');
+                }
+            });
+        });
+    </script>
+    @* For those who want to change the active state of the nav link, just uncomment the code above and comment the code below*@
 
     @RenderSection("scripts", required: false)
 
 </body>
 </html>
-@* testing *@
